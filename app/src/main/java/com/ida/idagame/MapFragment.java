@@ -36,9 +36,79 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
     GoogleMap.OnMapClickListener,
     GoogleMap.OnMarkerClickListener{
 
+    private GoogleApiClient mGoogleApiClient;
+    private Location mCurrentLocation;
+
+    private final int[] MAP_TYPES = { GoogleMap.MAP_TYPE_SATELLITE,
+            GoogleMap.MAP_TYPE_NORMAL,
+            GoogleMap.MAP_TYPE_HYBRID,
+            GoogleMap.MAP_TYPE_TERRAIN,
+            GoogleMap.MAP_TYPE_NONE };
+    private int curMapTypeIndex = 0;
+
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setHasOptionsMenu(true);
+
+        mGoogleApiClient = new GoogleApiClient.Builder( getActivity() )
+                .addConnectionCallbacks( this )
+                .addOnConnectionFailedListener( this )
+                .addApi( LocationServices.API )
+                .build();
+
+        initListeners();
+    }
+
+    private void initListeners() {
+        getMap().setOnMarkerClickListener(this);
+        getMap().setOnMapLongClickListener(this);
+        getMap().setOnInfoWindowClickListener( this );
+        getMap().setOnMapClickListener(this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if( mGoogleApiClient != null && mGoogleApiClient.isConnected() ) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
     @Override
     public void onConnected(Bundle bundle) {
+        mCurrentLocation = LocationServices
+                .FusedLocationApi
+                .getLastLocation( mGoogleApiClient );
 
+        //System.out.println(mCurrentLocation);
+        initCamera( mCurrentLocation );
+    }
+
+    private void initCamera( Location location ) {
+        CameraPosition position = CameraPosition.builder()
+                .target( new LatLng( location.getLatitude(),
+                        location.getLongitude() ) )
+                .zoom( 16f )
+                .bearing( 0.0f )
+                .tilt( 0.0f )
+                .build();
+
+        getMap().animateCamera( CameraUpdateFactory
+                .newCameraPosition( position ), null );
+
+        getMap().setMapType( MAP_TYPES[curMapTypeIndex] );
+        getMap().setTrafficEnabled( false );
+        getMap().setMyLocationEnabled( true );
+        getMap().getUiSettings().setZoomControlsEnabled( true );
     }
 
     @Override
