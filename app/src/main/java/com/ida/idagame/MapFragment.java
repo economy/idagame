@@ -3,6 +3,7 @@ package com.ida.idagame;
 import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,7 +45,7 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
             GoogleMap.MAP_TYPE_HYBRID,
             GoogleMap.MAP_TYPE_TERRAIN,
             GoogleMap.MAP_TYPE_NONE };
-    private int curMapTypeIndex = 0;
+    private int curMapTypeIndex = 1;
 
 
     @Override
@@ -89,6 +90,13 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
                 .FusedLocationApi
                 .getLastLocation( mGoogleApiClient );
 
+        // NB: location returning null
+        if(mCurrentLocation == null) {
+            mCurrentLocation = new Location( "" );
+            mCurrentLocation.setLatitude( 37.422535 );
+            mCurrentLocation.setLongitude( -122.084804 );
+        }
+
         //System.out.println(mCurrentLocation);
         initCamera( mCurrentLocation );
     }
@@ -112,12 +120,16 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        //Create a default location if the Google API Client fails. Placing location at Googleplex
+        mCurrentLocation = new Location( "" );
+        mCurrentLocation.setLatitude( 37.422535 );
+        mCurrentLocation.setLongitude( -122.084804 );
+        initCamera(mCurrentLocation);
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionSuspended(int i) {
 
     }
 
