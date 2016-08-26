@@ -9,6 +9,8 @@ public class Business {
 
     protected static float difficulty;
     protected static float reward;
+    protected static float rewardProb;
+    protected static float difficultyProb;
 
     public Business() {
         difficulty = 0;
@@ -21,8 +23,8 @@ public class Business {
         Random rewardGenerator = new Random(rewardSeed);
         Random difficultyGenerator = new Random(difficultySeed);
 
-        float rewardProb = rewardGenerator.nextInt(100);
-        float difficultyProb = difficultyGenerator.nextInt(100);
+        rewardProb = rewardGenerator.nextInt(100);
+        difficultyProb = difficultyGenerator.nextInt(100);
     }
 
 }
