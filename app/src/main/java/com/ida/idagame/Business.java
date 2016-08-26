@@ -9,7 +9,6 @@ public class Business {
 
     protected static float difficulty;
     protected static float reward;
-    public static 
 
     public Business() {
         difficulty = 0;

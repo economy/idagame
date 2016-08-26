@@ -157,18 +157,12 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
             // Creating a new non-ui thread task to download Google place json data
             PlacesTask placesTask = new PlacesTask();
 
-            setCurType(value);
-
             // Invokes the "doInBackground()" method of the class PlaceTask
             System.out.println(sb.toString());
             placesTask.execute(sb.toString());
 
         }
 
-    }
-
-    public void setCurType(String type) {
-        curType.add(type);
     }
 
     @Override
@@ -305,11 +299,9 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
                 markerOptions.title(name);
                 markerOptions.snippet(vicinity);
 
-                System.out.println(curType);
                 String myIcon = "";
 
-                myIcon = String.format("%s.png",curType.get(i));
-                markerOptions.icon(BitmapDescriptorFactory.fromFile(myIcon));
+                markerOptions.icon(BitmapDescriptorFactory.fromFile(String.valueOf(R.drawable.atm)));
 
                 // Placing a marker on the touched position
                 Marker m = getMap().addMarker(markerOptions);
