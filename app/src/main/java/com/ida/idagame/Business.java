@@ -7,15 +7,11 @@ import java.util.Random;
  */
 public class Business {
 
-    protected static float difficulty;
-    protected static float reward;
-    protected static float rewardProb;
-    protected static float difficultyProb;
+    protected static double rewardProb;
+    protected static double difficultyProb;
+    protected static int rewardLevel;
+    protected static int difficultyLevel;
 
-    public Business() {
-        difficulty = 0;
-        reward = 0;
-    }
 
     public Business(double latitude, double longitude){
         int rewardSeed = (int) (Math.pow(10, 6) * Math.round(latitude));
@@ -23,8 +19,24 @@ public class Business {
         Random rewardGenerator = new Random(rewardSeed);
         Random difficultyGenerator = new Random(difficultySeed);
 
-        rewardProb = rewardGenerator.nextInt(100);
-        difficultyProb = difficultyGenerator.nextInt(100);
+        rewardProb = (float) (rewardGenerator.nextInt(100)/ 100.0);
+        difficultyProb = (float) (difficultyGenerator.nextInt(100) / 100.0);
+
+        if (rewardProb <= 0.3)
+            rewardLevel = 1;
+        else if (rewardProb <= 0.6)
+            rewardLevel = 2;
+        else
+            rewardLevel = 3;
+
+        if (difficultyProb <= 0.3)
+            difficultyLevel = 1;
+        else if (difficultyProb <= 0.6)
+            difficultyLevel = 2;
+        else
+            difficultyLevel = 3;
+
     }
 
 }
+>>>>>>> soysal

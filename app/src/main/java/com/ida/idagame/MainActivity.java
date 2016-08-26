@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         final Button mybtnGas = (Button) findViewById(R.id.buttonGas);
         final TextView txtView = (TextView) findViewById(R.id.textView4);
         final TextView txtView2 = (TextView) findViewById(R.id.textView2); // This one is CCs stolen, IDs stolen, balance...
+        final TextView txtView3 = (TextView) findViewById(R.id.textView);
+
         txtView.setText("Grand Theft ID");
         txtView2.setText("CCs Stolen: " + String.valueOf(myUser.numCC) + "\nIDs Stolen: " + String.valueOf(myUser.numID) + "\nBalance: " + String.valueOf(myUser.cash));
         //txtView.setVisibility(View.GONE);
@@ -40,12 +42,44 @@ public class MainActivity extends AppCompatActivity {
         mybtnOption2.setVisibility(View.GONE);
         mybtnOption3.setVisibility(View.GONE);
 
+        final Business myBusiness = new Business(37.422535, -122.084804);
+        //txtView3.setText("Shell Station\nReward: $$$\nRisk: ☠☠☠");
+
+        String tempStr = "Shell Station\nReward: ";
+        if (myBusiness.rewardLevel == 1)
+        {
+            tempStr = tempStr + "$  \n";
+        }
+        else if (myBusiness.rewardLevel == 2)
+        {
+            tempStr = tempStr + "$$ \n";
+        }
+        else if (myBusiness.rewardLevel == 3)
+        {
+            tempStr = tempStr + "$$$\n";
+        }
+
+        tempStr = tempStr + "Difficulty: ";
+        if (myBusiness.difficultyLevel == 1)
+        {
+            tempStr = tempStr + "☠  ";
+        }
+        else if (myBusiness.difficultyLevel == 2)
+        {
+            tempStr = tempStr + "☠☠ ";
+        }
+        else if (myBusiness.difficultyLevel == 3)
+        {
+            tempStr = tempStr + "☠☠☠";
+        }
+        txtView3.setText(tempStr);
 
         mybtnBank.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
                 myStoreState.store = 1;
                 txtView.setText("Grand Theft ID");
+                //txtView.setText(Double.toString(myBusiness.rewardProb));
                 txtView.setVisibility(View.VISIBLE);
                 mybtnOption1.setText("Open Account");
                 mybtnOption2.setText("Rob the Bank");
