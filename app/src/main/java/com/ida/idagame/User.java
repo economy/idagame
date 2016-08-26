@@ -6,9 +6,9 @@ package com.ida.idagame;
 public class User {
 
     protected static int numID;
-    public static int numCC;
-    public static int cash;
-    public static String name;
+    protected static int numCC;
+    protected static int cash;
+    protected static String name;
 
     public User(){
         numID = 1;
