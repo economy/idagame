@@ -158,7 +158,7 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
             PlacesTask placesTask = new PlacesTask();
 
             // Invokes the "doInBackground()" method of the class PlaceTask
-            System.out.println(sb.toString());
+            //System.out.println(sb.toString());
             placesTask.execute(sb.toString());
 
         }
@@ -313,7 +313,7 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
                 // Placing a marker on the touched position
                 Marker m = getMap().addMarker(markerOptions);
 
-                System.out.println(list.get(i));
+                //System.out.println(list.get(i));
                 // Linking Marker id and place reference
                 mMarkerPlaceLink.put(m.getId(), hmPlace.get("reference"));
             }
