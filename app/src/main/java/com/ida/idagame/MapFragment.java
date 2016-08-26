@@ -296,17 +296,21 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
 
                 String types = hmPlace.get("types");
 
+                String type = "";
                 if (types.contains("bank")) {
+                    type = "Bank";
                     markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.bank));
                 } else if (types.contains("atm")) {
+                    type = "ATM";
                     markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.atm));
                 } else {
+                    type = "Gas Station";
                     markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.gas_station));
                 }
 
                 // Setting the title for the marker.
                 //This will be displayed on taping the marker
-                markerOptions.title(name);
+                markerOptions.title(name + " : " + type);
                 markerOptions.snippet(vicinity);
 
 
@@ -343,6 +347,19 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        LatLng curLoc = marker.getPosition();
+
+        Business curBus = new Business(curLoc.latitude,curLoc.longitude);
+
+        String[] title = marker.getTitle().split(":");
+        if (title[1].contains("bank")) {
+
+        } else if (title[1].contains("atm")) {
+
+        } else {
+
+        }
+
         return false;
     }
 }
