@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 import android.util.Log;
 import android.os.AsyncTask;
+import android.graphics.Bitmap;
 
 import org.json.JSONObject;
 
@@ -23,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -31,6 +33,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -64,6 +67,7 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
             GoogleMap.MAP_TYPE_NONE };
     private int curMapTypeIndex = 1;
 
+    public List<String> curType = new ArrayList<String>();
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -139,22 +143,32 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
         getMap().setMyLocationEnabled( true );
         getMap().getUiSettings().setZoomControlsEnabled( true );
 
-        String type = "bank";
+        String[] allTypes = {"bank","atm","gas_station"};
 
-        StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        sb.append("location="+location.getLatitude()+","+location.getLongitude());
-        sb.append("&radius=5000");
-        sb.append("&types="+type);
-        sb.append("&sensor=true");
-        sb.append("&key=AIzaSyC0pS-D86ssdh7oF3E5lnzuaJ0vWq-wCTY");
+        for (String value: allTypes ) {
 
-        // Creating a new non-ui thread task to download Google place json data
-        PlacesTask placesTask = new PlacesTask();
+            StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+            sb.append("location="+location.getLatitude()+","+location.getLongitude());
+            sb.append("&radius=5000");
+            sb.append("&types="+value);
+            sb.append("&sensor=true");
+            sb.append("&key=AIzaSyC0pS-D86ssdh7oF3E5lnzuaJ0vWq-wCTY");
 
-        // Invokes the "doInBackground()" method of the class PlaceTask
-        System.out.println(sb.toString());
-        placesTask.execute(sb.toString());
+            // Creating a new non-ui thread task to download Google place json data
+            PlacesTask placesTask = new PlacesTask();
 
+            setCurType(value);
+
+            // Invokes the "doInBackground()" method of the class PlaceTask
+            System.out.println(sb.toString());
+            placesTask.execute(sb.toString());
+
+        }
+
+    }
+
+    public void setCurType(String type) {
+        curType.add(type);
     }
 
     @Override
@@ -288,15 +302,24 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
 
                 // Setting the title for the marker.
                 //This will be displayed on taping the marker
-                markerOptions.title(name + " : " + vicinity);
+                markerOptions.title(name);
+                markerOptions.snippet(vicinity);
+
+                System.out.println(curType);
+                String myIcon = "";
+
+                myIcon = String.format("%s.png",curType.get(i));
+                markerOptions.icon(BitmapDescriptorFactory.fromFile(myIcon));
 
                 // Placing a marker on the touched position
                 Marker m = getMap().addMarker(markerOptions);
 
+                System.out.println(list.get(i));
                 // Linking Marker id and place reference
                 mMarkerPlaceLink.put(m.getId(), hmPlace.get("reference"));
             }
         }
+
     }
 
     @Override
