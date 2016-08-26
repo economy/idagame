@@ -57,6 +57,7 @@ public class PlaceJsonParser {
         String latitude="";
         String longitude="";
         String reference="";
+        String types = "";
 
         try {
             // Extracting Place name, if available
@@ -69,6 +70,10 @@ public class PlaceJsonParser {
                 vicinity = jPlace.getString("vicinity");
             }
 
+            if(!jPlace.isNull("types")){
+                types = jPlace.getJSONArray("types").toString();
+            }
+
             latitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lat");
             longitude = jPlace.getJSONObject("geometry").getJSONObject("location").getString("lng");
             reference = jPlace.getString("reference");
@@ -78,6 +83,7 @@ public class PlaceJsonParser {
             place.put("lat", latitude);
             place.put("lng", longitude);
             place.put("reference", reference);
+            place.put("types", types);
 
         } catch (JSONException e) {
             e.printStackTrace();

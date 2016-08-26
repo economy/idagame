@@ -294,14 +294,21 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
                 // Setting the position for the marker
                 markerOptions.position(latLng);
 
+                String types = hmPlace.get("types");
+
+                if (types.contains("bank")) {
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.bank));
+                } else if (types.contains("atm")) {
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.atm));
+                } else {
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.gas_station));
+                }
+
                 // Setting the title for the marker.
                 //This will be displayed on taping the marker
                 markerOptions.title(name);
                 markerOptions.snippet(vicinity);
 
-                String myIcon = "";
-
-                markerOptions.icon(BitmapDescriptorFactory.fromFile(String.valueOf(R.drawable.atm)));
 
                 // Placing a marker on the touched position
                 Marker m = getMap().addMarker(markerOptions);
